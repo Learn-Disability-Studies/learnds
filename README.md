@@ -35,4 +35,4 @@ Static files are served from `public/`; the Worker entrypoint is `worker/index.j
 
 ## Notion Import Status
 
-The requested Notion URL could not be accessed from this environment because the page content was not publicly readable. Export the Notion page as Markdown or make it public, then place the content under `content/` for import.
+The initial content was imported from the Notion Markdown export supplied by the project maintainers. Future copy edits should be made directly in `public/content/*.md` on GitHub so Cloudflare can rebuild from the repository.

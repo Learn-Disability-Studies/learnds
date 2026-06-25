@@ -61,31 +61,47 @@ function parseRoute() {
 
 function parseMarkdown(markdown) {
   const lines = markdown.replace(/\r\n/g, "\n").split("\n");
-  const title = (lines.find((line) => line.startsWith("# ")) || "# Untitled").replace(/^# /, "").trim();
+  const title = normalizeTitle(
+    (lines.find((line) => line.startsWith("# ")) || "# Untitled").replace(/^# /, "").trim()
+  );
   const sections = {};
   let current = "summary";
   let buffer = [];
+  let goodToKnow = "";
+  let checkOutNext = "";
+  let summary = "";
 
   for (const line of lines.slice(1)) {
     if (line.startsWith("## ")) {
       sections[current] = cleanParagraph(buffer);
       current = sectionKey(line.replace(/^## /, "").trim());
       buffer = [];
+    } else if (current === "summary" && /^Good to know:/i.test(line)) {
+      goodToKnow = line.replace(/^Good to know:\s*/i, "").trim();
+    } else if (current === "summary" && /^Check out next:/i.test(line)) {
+      checkOutNext = line.replace(/^Check out next:\s*/i, "").trim();
     } else {
       buffer.push(line);
     }
   }
   sections[current] = cleanParagraph(buffer);
+  summary = firstSentence(sections.summary || sections.explanation || sections.clarification || "");
 
   return {
     title,
-    summary: sections.summary || "",
-    goodToKnow: sections.goodToKnow || "",
+    summary,
+    goodToKnow,
+    checkOutNext,
     explanation: sections.explanation || "",
     clarification: sections.clarification || "",
     application: sections.application || "",
-    livedExperience: sections.livedExperience || ""
+    livedExperience: sections.livedExperience || "",
+    extension: sections.extension || ""
   };
+}
+
+function normalizeTitle(title) {
+  return title.replace(/\s+/g, " ").trim();
 }
 
 function cleanParagraph(lines) {
@@ -98,12 +114,43 @@ function sectionKey(title) {
     Explanation: "explanation",
     Clarification: "clarification",
     Application: "application",
-    "Lived Experience": "livedExperience"
+    "Lived Experience": "livedExperience",
+    Extension: "extension"
   }[title] || title.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function firstSentence(markdown) {
+  const text = stripMarkdown(markdown);
+  const sentence = text.match(/^.{40,220}?[.!?](?:\s|$)/);
+  return sentence ? sentence[0].trim() : text.slice(0, 220).trim();
+}
+
+function stripMarkdown(markdown) {
+  return markdown
+    .replace(/<aside>|<\/aside>/g, " ")
+    .replace(/\[[^\]]+\]\(([^)]+)\)/g, "$1")
+    .replace(/[#>*_|`-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function entryBySlug(slug) {
   return state.entries.find((entry) => entry.slug === slug) || state.entries[0];
+}
+
+function slugByTitle(title) {
+  const normalized = normalizeConceptName(title);
+  const aliases = {
+    "temporarily able bodied tab": "temporary-able-bodied-tab",
+    "temporary able bodied tab": "temporary-able-bodied-tab"
+  };
+  if (aliases[normalized]) return aliases[normalized];
+  const match = state.entries.find((entry) => normalizeConceptName(entry.title) === normalized);
+  return match ? match.slug : "";
+}
+
+function normalizeConceptName(value) {
+  return String(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, " ").trim();
 }
 
 function visibleEntries() {
@@ -211,10 +258,12 @@ function renderEntry(entry) {
         <a class="back-link" href="#/">← Catalogue</a>
         <h2>Contents</h2>
         <a href="#good-to-know">Good to Know</a>
+        <a href="#check-next">Check out next</a>
         <a href="#explanation">Explanation</a>
         <a href="#clarification">Clarification</a>
         <a href="#application">Application</a>
         <a href="#lived-experience">Lived Experience</a>
+        <a href="#extension">Extension</a>
       </aside>
       <article class="entry-article">
         <div class="entry-kicker">${escapeHtml(entry.category)} concept</div>
@@ -225,7 +274,10 @@ function renderEntry(entry) {
           <a class="button" href="#/">Back to catalogue</a>
         </div>
 
-        ${section("good-to-know", "Good to Know", entry.goodToKnow)}
+        <section id="good-to-know" class="content-section">
+          <h2>Good to Know</h2>
+          ${renderConceptLinks(entry.goodToKnow)}
+        </section>
         <section id="check-next" class="content-section next-section">
           <h2>Check out next</h2>
           <div class="next-grid">
@@ -239,13 +291,159 @@ function renderEntry(entry) {
         ${section("clarification", "Clarification", entry.clarification)}
         ${section("application", "Application", entry.application)}
         ${section("lived-experience", "Lived Experience", entry.livedExperience)}
+        ${section("extension", "Extension", entry.extension)}
       </article>
     </main>
   `;
 }
 
 function section(id, title, text) {
-  return `<section id="${id}" class="content-section"><h2>${title}</h2><p>${escapeHtml(text)}</p></section>`;
+  const body = text.trim() ? `<div class="markdown">${renderMarkdown(text)}</div>` : `<p class="muted">To be added.</p>`;
+  return `<section id="${id}" class="content-section"><h2>${title}</h2>${body}</section>`;
+}
+
+function renderConceptLinks(text) {
+  if (!text || /^none$/i.test(text.trim())) return `<p class="muted">None</p>`;
+  const concepts = text.split(/[\/;,]+/).map((item) => item.trim()).filter(Boolean);
+  return `
+    <div class="concept-links">
+      ${concepts.map((concept) => {
+        const slug = slugByTitle(concept);
+        if (!slug) return `<span>${escapeHtml(concept)}</span>`;
+        return `<a href="#/entry/${slug}">${escapeHtml(normalizeTitle(concept))}</a>`;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderMarkdown(markdown) {
+  const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+  let html = "";
+  let i = 0;
+
+  while (i < lines.length) {
+    const raw = lines[i];
+    const line = raw.trim();
+
+    if (!line) {
+      i += 1;
+      continue;
+    }
+
+    if (line === "<aside>") {
+      html += `<div class="callout">`;
+      i += 1;
+      continue;
+    }
+
+    if (line === "</aside>") {
+      html += `</div>`;
+      i += 1;
+      continue;
+    }
+
+    if (/^---+$/.test(line)) {
+      html += `<hr />`;
+      i += 1;
+      continue;
+    }
+
+    if (/^#{3,4}\s+/.test(line)) {
+      const level = line.startsWith("#### ") ? 4 : 3;
+      html += `<h${level}>${inlineMarkdown(line.replace(/^#{3,4}\s+/, ""))}</h${level}>`;
+      i += 1;
+      continue;
+    }
+
+    if (isTableLine(line)) {
+      const tableLines = [];
+      while (i < lines.length && isTableLine(lines[i].trim())) {
+        tableLines.push(lines[i].trim());
+        i += 1;
+      }
+      html += renderTable(tableLines);
+      continue;
+    }
+
+    if (/^>\s?/.test(line)) {
+      const quote = [];
+      while (i < lines.length && /^>\s?/.test(lines[i].trim())) {
+        quote.push(lines[i].trim().replace(/^>\s?/, ""));
+        i += 1;
+      }
+      html += `<blockquote>${quote.map(inlineMarkdown).join("<br />")}</blockquote>`;
+      continue;
+    }
+
+    if (/^\s*[-*]\s+/.test(raw)) {
+      const items = [];
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
+        i += 1;
+      }
+      html += `<ul>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`;
+      continue;
+    }
+
+    if (/^\s*\d+\.\s+/.test(raw)) {
+      const items = [];
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*\d+\.\s+/, ""));
+        i += 1;
+      }
+      html += `<ol>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ol>`;
+      continue;
+    }
+
+    const paragraph = [line];
+    i += 1;
+    while (i < lines.length && lines[i].trim() && !startsMarkdownBlock(lines[i])) {
+      paragraph.push(lines[i].trim());
+      i += 1;
+    }
+    html += `<p>${inlineMarkdown(paragraph.join(" "))}</p>`;
+  }
+
+  return html;
+}
+
+function startsMarkdownBlock(value) {
+  const line = value.trim();
+  return line === "<aside>" ||
+    line === "</aside>" ||
+    /^---+$/.test(line) ||
+    /^#{3,4}\s+/.test(line) ||
+    /^>\s?/.test(line) ||
+    isTableLine(line) ||
+    /^\s*[-*]\s+/.test(value) ||
+    /^\s*\d+\.\s+/.test(value);
+}
+
+function isTableLine(line) {
+  return line.startsWith("|") && line.endsWith("|");
+}
+
+function renderTable(lines) {
+  const rows = lines
+    .filter((line) => !/^\|\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(line))
+    .map((line) => line.split("|").slice(1, -1).map((cell) => cell.trim()));
+  if (!rows.length) return "";
+  const [head, ...body] = rows;
+  return `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead>
+        <tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function inlineMarkdown(value) {
+  return escapeHtml(value)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
 }
 
 function editUrl(slug) {

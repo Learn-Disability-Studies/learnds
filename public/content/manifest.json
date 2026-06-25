@@ -1,68 +1,93 @@
 [
   {
-    "slug": "social-model-of-disability",
+    "slug": "models-of-disability",
     "category": "Core",
     "order": 1,
-    "next": ["medical-model", "barriers", "accessibility"]
+    "next": [
+      "impairment-vs-disability",
+      "relational-model"
+    ]
   },
   {
-    "slug": "medical-model",
+    "slug": "impairment-vs-disability",
     "category": "Core",
     "order": 2,
-    "next": ["social-model-of-disability", "reasonable-accommodation", "ableism"]
+    "next": [
+      "the-social-environment",
+      "relational-model"
+    ]
   },
   {
-    "slug": "barriers",
+    "slug": "the-social-environment",
     "category": "Core",
     "order": 3,
-    "next": ["accessibility", "universal-design", "reasonable-accommodation"]
+    "next": [
+      "universal-design",
+      "curb-cut-effect"
+    ]
   },
   {
-    "slug": "accessibility",
+    "slug": "nothing-about-us-without-us",
     "category": "Core",
     "order": 4,
-    "next": ["universal-design", "reasonable-accommodation", "collective-access"]
-  },
-  {
-    "slug": "reasonable-accommodation",
-    "category": "Core",
-    "order": 5,
-    "next": ["universal-design", "accessibility", "crpd"]
+    "next": [
+      "independent-living-il"
+    ]
   },
   {
     "slug": "universal-design",
-    "category": "Extended",
+    "category": "Core",
+    "order": 5,
+    "next": [
+      "curb-cut-effect",
+      "temporary-able-bodied-tab",
+      "nothing-about-us-without-us"
+    ]
+  },
+  {
+    "slug": "curb-cut-effect",
+    "category": "Core",
     "order": 6,
-    "next": ["reasonable-accommodation", "collective-access", "accessibility"]
+    "next": [
+      "universal-design",
+      "independent-living-il"
+    ]
   },
   {
     "slug": "ableism",
-    "category": "Extended",
+    "category": "Core",
     "order": 7,
-    "next": ["disability-justice", "access-intimacy", "social-model-of-disability"]
+    "next": [
+      "temporary-able-bodied-tab",
+      "independent-living-il"
+    ]
   },
   {
-    "slug": "disability-justice",
-    "category": "Extended",
+    "slug": "temporary-able-bodied-tab",
+    "category": "Core",
     "order": 8,
-    "next": ["collective-access", "access-intimacy", "ableism"]
+    "next": [
+      "universal-design",
+      "independent-living-il"
+    ]
   },
   {
-    "slug": "collective-access",
+    "slug": "independent-living-il",
     "category": "Extended",
     "order": 9,
-    "next": ["disability-justice", "access-intimacy", "accessibility"]
+    "next": [
+      "ableism",
+      "the-social-environment",
+      "universal-design",
+      "nothing-about-us-without-us"
+    ]
   },
   {
-    "slug": "access-intimacy",
+    "slug": "relational-model",
     "category": "Extended",
     "order": 10,
-    "next": ["collective-access", "disability-justice", "ableism"]
-  },
-  {
-    "slug": "crpd",
-    "category": "Extended",
-    "order": 11,
-    "next": ["reasonable-accommodation", "accessibility", "social-model-of-disability"]
+    "next": [
+      "nothing-about-us-without-us"
+    ]
   }
 ]

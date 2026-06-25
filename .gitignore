@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+/assets/
+package-lock.json
+.next/
+dist/
+.wrangler/
+.playwright-mcp/
+.omc/
+screenshot.png
+site-qa.png
+用所选项目新建的文件夹/

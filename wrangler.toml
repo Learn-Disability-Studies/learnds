@@ -1,0 +1,9 @@
+name = "learnds"
+main = "./worker/index.js"
+compatibility_date = "2026-06-25"
+preview_urls = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"

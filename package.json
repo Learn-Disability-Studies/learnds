@@ -1,0 +1,9 @@
+{
+  "name": "disability-social-model-wiki",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 4173 --directory public",
+    "deploy": "wrangler deploy"
+  }
+}

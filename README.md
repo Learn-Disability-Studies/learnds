@@ -12,7 +12,14 @@ Open `http://localhost:4173`.
 
 ## Content Editing
 
-Entry source files live in `content/`. To edit a page, update the matching Markdown file and the corresponding entry in `public/app.js`.
+Entry source files live in `public/content/*.md`. The live site reads these Markdown files at runtime.
+
+To update copy:
+
+1. Edit the matching Markdown file in `public/content/`.
+2. Commit the change to `main`.
+3. Cloudflare Workers Builds redeploys the Worker from GitHub.
+4. The site serves the updated copy.
 
 The live site includes GitHub edit links for each concept page.
 

@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "social-model-of-disability",
+    "category": "Core",
+    "order": 1,
+    "next": ["medical-model", "barriers", "accessibility"]
+  },
+  {
+    "slug": "medical-model",
+    "category": "Core",
+    "order": 2,
+    "next": ["social-model-of-disability", "reasonable-accommodation", "ableism"]
+  },
+  {
+    "slug": "barriers",
+    "category": "Core",
+    "order": 3,
+    "next": ["accessibility", "universal-design", "reasonable-accommodation"]
+  },
+  {
+    "slug": "accessibility",
+    "category": "Core",
+    "order": 4,
+    "next": ["universal-design", "reasonable-accommodation", "collective-access"]
+  },
+  {
+    "slug": "reasonable-accommodation",
+    "category": "Core",
+    "order": 5,
+    "next": ["universal-design", "accessibility", "crpd"]
+  },
+  {
+    "slug": "universal-design",
+    "category": "Extended",
+    "order": 6,
+    "next": ["reasonable-accommodation", "collective-access", "accessibility"]
+  },
+  {
+    "slug": "ableism",
+    "category": "Extended",
+    "order": 7,
+    "next": ["disability-justice", "access-intimacy", "social-model-of-disability"]
+  },
+  {
+    "slug": "disability-justice",
+    "category": "Extended",
+    "order": 8,
+    "next": ["collective-access", "access-intimacy", "ableism"]
+  },
+  {
+    "slug": "collective-access",
+    "category": "Extended",
+    "order": 9,
+    "next": ["disability-justice", "access-intimacy", "accessibility"]
+  },
+  {
+    "slug": "access-intimacy",
+    "category": "Extended",
+    "order": 10,
+    "next": ["collective-access", "disability-justice", "ableism"]
+  },
+  {
+    "slug": "crpd",
+    "category": "Extended",
+    "order": 11,
+    "next": ["reasonable-accommodation", "accessibility", "social-model-of-disability"]
+  }
+]

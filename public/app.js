@@ -330,9 +330,12 @@ function renderHome() {
           <p><strong>Our team:</strong> LearnDS is currently maintained by Jerry and Hank. As non-disabled allies, we strive to prioritize lived experiences in our work.</p>
           <p><a href="mailto:${SITE.contact}">If you are interested in contributing, please contact ${SITE.contact}.</a></p>
         </div>
-        <figure class="hero-media">
-          <img src="./assets/learnds-reference.png" alt="Reference layout showing Learn Disability Studies text beside disability studies book covers." />
-        </figure>
+        <div class="hero-media" aria-label="Selected disability studies readings">
+          <div class="book-cover black">The Politics of Disablement<span>Michael Oliver</span></div>
+          <div class="book-cover yellow">Understanding Disability<span>From Theory to Practice</span></div>
+          <div class="book-cover dark">The Disability Studies Reader<span>Critical essays</span></div>
+          <div class="book-cover red">Nothing About Us Without Us<span>James I. Charlton</span></div>
+        </div>
       </section>
 
       <section class="catalogue-page" aria-labelledby="catalogue-title">

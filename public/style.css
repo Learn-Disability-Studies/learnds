@@ -3,6 +3,7 @@
   --ink: #0b0b0d;
   --muted: #666a73;
   --soft: #f6f6f5;
+  --blue: #1264d8;
   --line: #e8e8e6;
   --line-strong: #d7d7d4;
   --focus: #111111;
@@ -46,7 +47,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  min-height: 72px;
+  min-height: 64px;
   padding: 0 clamp(22px, 5vw, 80px);
   border-bottom: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.92);
@@ -119,7 +120,7 @@ nav a.active,
   grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
   gap: clamp(28px, 5vw, 72px);
   align-items: center;
-  padding: clamp(48px, 8vw, 112px) clamp(22px, 5vw, 80px) clamp(34px, 6vw, 72px);
+  padding: clamp(30px, 5vw, 72px) clamp(22px, 5vw, 80px) clamp(30px, 5vw, 58px);
 }
 
 .hero-copy {
@@ -127,7 +128,7 @@ nav a.active,
 }
 
 .hero h1 {
-  margin: 0 0 48px;
+  margin: 0 0 34px;
   font-size: clamp(4.5rem, 9.5vw, 9.6rem);
   font-weight: 400;
   line-height: 1.06;
@@ -136,7 +137,7 @@ nav a.active,
 
 .hero p {
   max-width: 860px;
-  margin: 0 0 28px;
+  margin: 0 0 24px;
   font-size: clamp(1.18rem, 1.7vw, 2rem);
   line-height: 1.45;
 }
@@ -145,57 +146,37 @@ nav a.active,
   font-weight: 800;
 }
 
-.hero p a {
+.contact-line a {
+  color: var(--blue);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.contact-line a:hover {
+  text-decoration: underline;
   text-underline-offset: 4px;
 }
 
 .hero-media {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 14px;
+  align-items: start;
 }
 
-.book-cover {
-  display: flex;
-  min-height: 260px;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 22px;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  font-size: clamp(1.55rem, 2.2vw, 2.5rem);
-  font-weight: 900;
-  line-height: 0.98;
-  text-transform: uppercase;
-}
-
-.book-cover span {
+.hero-media img {
   display: block;
-  margin-top: 28px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
+  width: 100%;
+  height: clamp(210px, 22vw, 330px);
+  border: 1px solid var(--line);
+  background: #fff;
+  object-fit: contain;
+  object-position: center;
+  box-shadow: var(--shadow);
 }
 
-.book-cover.black {
-  background: #0a0a0a;
-  color: #fff;
-}
-
-.book-cover.yellow {
-  background: #f6c327;
-  color: #213a8f;
-}
-
-.book-cover.dark {
-  background: #201d1d;
-  color: #f7f1e8;
-}
-
-.book-cover.red {
-  background: #d92020;
-  color: #fff;
+.hero-media img:nth-child(2) {
+  background: #f9f1d0;
 }
 
 .catalogue-page {
@@ -220,6 +201,16 @@ nav a.active,
   font-weight: 750;
   letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.entry-kicker {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
 }
 
 .section-bar h2 {
@@ -252,6 +243,13 @@ nav a.active,
   width: 100%;
   border: 0;
   outline: 0;
+}
+
+.search svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  color: var(--muted);
 }
 
 .segmented {
@@ -312,6 +310,20 @@ nav a.active,
   border-radius: 999px;
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+.row-category.category-core,
+.entry-kicker.category-core {
+  border-color: #b8d7ff;
+  background: #eef6ff;
+  color: #1252a3;
+}
+
+.row-category.category-extended,
+.entry-kicker.category-extended {
+  border-color: #f0d2a4;
+  background: #fff6e6;
+  color: #8a4f00;
 }
 
 .row-summary {
@@ -462,6 +474,7 @@ nav a.active,
 .markdown p,
 .markdown ul,
 .markdown ol,
+.markdown .structured-list,
 .markdown blockquote,
 .markdown .table-wrap,
 .markdown .callout {
@@ -476,6 +489,23 @@ nav a.active,
 .markdown li {
   margin: 6px 0;
   padding-left: 2px;
+}
+
+.structured-list {
+  display: grid;
+  gap: 7px;
+}
+
+.structured-list-item {
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr);
+  gap: 4px;
+  padding-left: calc(var(--level) * 1.25rem);
+}
+
+.list-marker {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .markdown h3,
@@ -625,7 +655,7 @@ nav a.active,
   }
 
   .hero h1 {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
 
   .controls {
@@ -656,7 +686,7 @@ nav a.active,
   }
 
   .hero {
-    padding-top: 36px;
+    padding-top: 28px;
   }
 
   .hero h1 {
@@ -665,6 +695,14 @@ nav a.active,
 
   .hero p {
     font-size: 1.1rem;
+  }
+
+  .hero-media {
+    gap: 10px;
+  }
+
+  .hero-media img {
+    height: 240px;
   }
 
   .entry-row {

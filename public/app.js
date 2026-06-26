@@ -176,13 +176,14 @@ function render() {
         <span><strong>${SITE.name}</strong><small>${SITE.fullName}</small></span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="#/" class="${state.route.page === "home" ? "active" : ""}">Catalogue</a>
-        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="#/" class="${state.route.page === "home" ? "active" : ""}">Index</a>
+        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">Edit on GitHub</a>
       </nav>
     </header>
     ${renderBody()}
   `;
 
+  if (window.lucide) window.lucide.createIcons();
   bindEvents();
 }
 
@@ -208,24 +209,24 @@ function renderHome() {
           <p><strong>Our Website:</strong> LearnDS contains a collection of accessible introductions to the social model and disability studies. No jargon, no complex logic, no difficult navigation. Zero prior experience required.</p>
           <p><strong>Our mission:</strong> LearnDS aims to promote the social model by removing the academic barrier to disability studies. We believe that knowledge shapes attitudes, and attitudes shape environments.</p>
           <p><strong>Our team:</strong> LearnDS is currently maintained by Jerry and Hank. As non-disabled allies, we strive to prioritize lived experiences in our work.</p>
-          <p><a href="mailto:${SITE.contact}">If you are interested in contributing, please contact ${SITE.contact}.</a></p>
+          <p class="contact-line">If you are interested in contributing, please contact <a href="mailto:${SITE.contact}">${SITE.contact}</a>.</p>
         </div>
         <div class="hero-media" aria-label="Selected disability studies readings">
-          <div class="book-cover black">The Politics of Disablement<span>Michael Oliver</span></div>
-          <div class="book-cover yellow">Understanding Disability<span>From Theory to Practice</span></div>
-          <div class="book-cover dark">The Disability Studies Reader<span>Critical essays</span></div>
-          <div class="book-cover red">Nothing About Us Without Us<span>James I. Charlton</span></div>
+          <img src="./assets/politics-of-disablement.jpg" alt="The Politics of Disablement by Michael Oliver" />
+          <img src="./assets/understanding-disability.jpg" alt="Understanding Disability by Michael Oliver" />
+          <img src="./assets/disability-studies-reader.jpg" alt="The Disability Studies Reader edited by Lennard J. Davis" />
+          <img src="./assets/nothing-about-us-without-us.png" alt="Nothing About Us Without Us by James I. Charlton" />
         </div>
       </section>
 
       <section class="catalogue-page" aria-labelledby="catalogue-title">
         <div class="section-bar">
           <div>
-            <p class="eyebrow">Catalogue</p>
+            <p class="eyebrow">Index</p>
             <h2 id="catalogue-title">Start with a concept</h2>
           </div>
           <div class="controls">
-            <label class="search">Search <input id="search" value="${escapeHtml(state.query)}" placeholder="Search entries" /></label>
+            <label class="search" aria-label="Search entries"><i data-lucide="search" aria-hidden="true"></i><input id="search" value="${escapeHtml(state.query)}" placeholder="Search Entries" /></label>
             <div class="segmented" aria-label="Sort entries">
               <button data-sort="learning" class="${state.sort === "learning" ? "active" : ""}">Learning order</button>
               <button data-sort="az" class="${state.sort === "az" ? "active" : ""}">A-Z</button>
@@ -244,7 +245,7 @@ function renderEntryRow(entry) {
   return `
     <a class="entry-row" href="#/entry/${entry.slug}">
       <span class="row-title">${escapeHtml(entry.title)}</span>
-      <span class="row-category">${escapeHtml(entry.category)}</span>
+      <span class="row-category ${categoryClass(entry.category)}">${escapeHtml(entry.category)}</span>
       <span class="row-summary">${escapeHtml(entry.summary)}</span>
       <span class="row-arrow">→</span>
     </a>
@@ -255,23 +256,23 @@ function renderEntry(entry) {
   return `
     <main class="entry-page">
       <aside class="entry-sidebar">
-        <a class="back-link" href="#/">← Catalogue</a>
+        <a class="back-link" href="#/">← Index</a>
         <h2>Contents</h2>
-        <a href="#good-to-know">Good to Know</a>
-        <a href="#check-next">Check out next</a>
-        <a href="#explanation">Explanation</a>
-        <a href="#clarification">Clarification</a>
-        <a href="#application">Application</a>
-        <a href="#lived-experience">Lived Experience</a>
-        <a href="#extension">Extension</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="good-to-know">Good to Know</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="check-next">Check out next</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="explanation">Explanation</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="clarification">Clarification</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="application">Application</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="lived-experience">Lived Experience</a>
+        <a href="#/entry/${entry.slug}" data-scroll-target="extension">Extension</a>
       </aside>
       <article class="entry-article">
-        <div class="entry-kicker">${escapeHtml(entry.category)} concept</div>
+        <div class="entry-kicker ${categoryClass(entry.category)}">${escapeHtml(entry.category)} concept</div>
         <h1>${escapeHtml(entry.title)}</h1>
         <p class="lead">${escapeHtml(entry.summary)}</p>
         <div class="entry-actions">
-          <a class="button primary" href="${editUrl(entry.slug)}" target="_blank" rel="noreferrer">Edit this page on GitHub</a>
-          <a class="button" href="#/">Back to catalogue</a>
+          <a class="button primary" href="${editUrl(entry.slug)}" target="_blank" rel="noreferrer">Edit on GitHub</a>
+          <a class="button" href="#/">Back to Index</a>
         </div>
 
         <section id="good-to-know" class="content-section">
@@ -280,12 +281,7 @@ function renderEntry(entry) {
         </section>
         <section id="check-next" class="content-section next-section">
           <h2>Check out next</h2>
-          <div class="next-grid">
-            ${entry.next.map((slug) => {
-              const item = entryBySlug(slug);
-              return `<a href="#/entry/${item.slug}"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary)}</span></a>`;
-            }).join("")}
-          </div>
+          ${renderNextLinks(entry)}
         </section>
         ${section("explanation", "Explanation", entry.explanation)}
         ${section("clarification", "Clarification", entry.clarification)}
@@ -295,6 +291,10 @@ function renderEntry(entry) {
       </article>
     </main>
   `;
+}
+
+function categoryClass(category) {
+  return `category-${String(category).toLowerCase()}`;
 }
 
 function section(id, title, text) {
@@ -311,6 +311,17 @@ function renderConceptLinks(text) {
         const slug = slugByTitle(concept);
         if (!slug) return `<span>${escapeHtml(concept)}</span>`;
         return `<a href="#/entry/${slug}">${escapeHtml(normalizeTitle(concept))}</a>`;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderNextLinks(entry) {
+  return `
+    <div class="concept-links">
+      ${entry.next.map((slug) => {
+        const item = entryBySlug(slug);
+        return `<a href="#/entry/${item.slug}">${escapeHtml(item.title)}</a>`;
       }).join("")}
     </div>
   `;
@@ -375,23 +386,13 @@ function renderMarkdown(markdown) {
       continue;
     }
 
-    if (/^\s*[-*]\s+/.test(raw)) {
-      const items = [];
-      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*[-*]\s+/, ""));
+    if (isListLine(raw)) {
+      const listLines = [];
+      while (i < lines.length && isListLine(lines[i])) {
+        listLines.push(lines[i]);
         i += 1;
       }
-      html += `<ul>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`;
-      continue;
-    }
-
-    if (/^\s*\d+\.\s+/.test(raw)) {
-      const items = [];
-      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
-        items.push(lines[i].replace(/^\s*\d+\.\s+/, ""));
-        i += 1;
-      }
-      html += `<ol>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ol>`;
+      html += renderStructuredList(listLines);
       continue;
     }
 
@@ -415,8 +416,7 @@ function startsMarkdownBlock(value) {
     /^#{3,4}\s+/.test(line) ||
     /^>\s?/.test(line) ||
     isTableLine(line) ||
-    /^\s*[-*]\s+/.test(value) ||
-    /^\s*\d+\.\s+/.test(value);
+    isListLine(value);
 }
 
 function isTableLine(line) {
@@ -435,6 +435,24 @@ function renderTable(lines) {
         <thead><tr>${head.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("")}</tr></thead>
         <tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join("")}</tr>`).join("")}</tbody>
       </table>
+    </div>
+  `;
+}
+
+function isListLine(value) {
+  return /^\s*(?:[-*]|\d+\.)\s+/.test(value);
+}
+
+function renderStructuredList(lines) {
+  return `
+    <div class="structured-list">
+      ${lines.map((line) => {
+        const match = line.match(/^(\s*)([-*]|\d+\.)\s+(.*)$/);
+        if (!match) return "";
+        const level = Math.min(Math.floor(match[1].length / 4), 4);
+        const marker = /^\d+\./.test(match[2]) ? match[2] : "•";
+        return `<div class="structured-list-item" style="--level: ${level}"><span class="list-marker">${marker}</span><span>${inlineMarkdown(match[3])}</span></div>`;
+      }).join("")}
     </div>
   `;
 }
@@ -470,6 +488,15 @@ function bindEvents() {
       }
     });
   }
+
+  document.querySelectorAll("[data-scroll-target]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const target = document.getElementById(link.dataset.scrollTarget);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#/entry/${state.route.slug}`);
+    });
+  });
 }
 
 function escapeHtml(value) {

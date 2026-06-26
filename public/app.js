@@ -69,7 +69,6 @@ function parseMarkdown(markdown) {
   let buffer = [];
   let goodToKnow = "";
   let checkOutNext = "";
-  let summary = "";
 
   for (const line of lines.slice(1)) {
     if (line.startsWith("## ")) {
@@ -85,11 +84,9 @@ function parseMarkdown(markdown) {
     }
   }
   sections[current] = cleanParagraph(buffer);
-  summary = firstSentence(sections.summary || sections.explanation || sections.clarification || "");
 
   return {
     title,
-    summary,
     goodToKnow,
     checkOutNext,
     explanation: sections.explanation || "",
@@ -119,21 +116,6 @@ function sectionKey(title) {
   }[title] || title.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
-function firstSentence(markdown) {
-  const text = stripMarkdown(markdown);
-  const sentence = text.match(/^.{40,220}?[.!?](?:\s|$)/);
-  return sentence ? sentence[0].trim() : text.slice(0, 220).trim();
-}
-
-function stripMarkdown(markdown) {
-  return markdown
-    .replace(/<aside>|<\/aside>/g, " ")
-    .replace(/\[[^\]]+\]\(([^)]+)\)/g, "$1")
-    .replace(/[#>*_|`-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 function entryBySlug(slug) {
   return state.entries.find((entry) => entry.slug === slug) || state.entries[0];
 }
@@ -161,7 +143,7 @@ function visibleEntries() {
   });
   if (!q) return sorted;
   return sorted.filter((entry) =>
-    [entry.title, entry.category, entry.summary, entry.goodToKnow].join(" ").toLowerCase().includes(q)
+    [entry.title, entry.category, entry.goodToKnow].join(" ").toLowerCase().includes(q)
   );
 }
 
@@ -246,7 +228,6 @@ function renderEntryRow(entry) {
     <a class="entry-row" href="#/entry/${entry.slug}">
       <span class="row-title">${escapeHtml(entry.title)}</span>
       <span class="row-category ${categoryClass(entry.category)}">${escapeHtml(entry.category)}</span>
-      <span class="row-summary">${escapeHtml(entry.summary)}</span>
       <span class="row-arrow">→</span>
     </a>
   `;
@@ -269,7 +250,6 @@ function renderEntry(entry) {
       <article class="entry-article">
         <div class="entry-kicker ${categoryClass(entry.category)}">${escapeHtml(entry.category)} concept</div>
         <h1>${escapeHtml(entry.title)}</h1>
-        <p class="lead">${escapeHtml(entry.summary)}</p>
         <div class="entry-actions">
           <a class="button primary" href="${editUrl(entry.slug)}" target="_blank" rel="noreferrer">Edit on GitHub</a>
           <a class="button" href="#/">Back to Index</a>

@@ -278,7 +278,7 @@ nav a.active,
 
 .entry-row {
   display: grid;
-  grid-template-columns: minmax(220px, 0.8fr) 120px minmax(280px, 1.25fr) 32px;
+  grid-template-columns: minmax(220px, 1fr) 120px 32px;
   gap: 18px;
   align-items: center;
   min-height: 76px;
@@ -324,11 +324,6 @@ nav a.active,
   border-color: #f0d2a4;
   background: #fff6e6;
   color: #8a4f00;
-}
-
-.row-summary {
-  color: var(--muted);
-  line-height: 1.45;
 }
 
 .row-arrow {
@@ -788,8 +783,7 @@ nav a.active,
     grid-template-columns: 1fr 32px;
   }
 
-  .row-category,
-  .row-summary {
+  .row-category {
     grid-column: 1 / -1;
   }
 

@@ -342,14 +342,14 @@ function renderMarkdown(markdown) {
     }
 
     if (line === "<aside>") {
-      html += `<div class="callout">`;
+      const calloutLines = [];
       i += 1;
-      continue;
-    }
-
-    if (line === "</aside>") {
-      html += `</div>`;
-      i += 1;
+      while (i < lines.length && lines[i].trim() !== "</aside>") {
+        calloutLines.push(lines[i]);
+        i += 1;
+      }
+      if (i < lines.length && lines[i].trim() === "</aside>") i += 1;
+      html += renderCallout(calloutLines);
       continue;
     }
 
@@ -463,6 +463,27 @@ function renderStructuredList(lines) {
       }).join("")}
     </div>
   `;
+}
+
+function renderCallout(lines) {
+  const trimmed = [...lines];
+  while (trimmed.length && !trimmed[0].trim()) trimmed.shift();
+  while (trimmed.length && !trimmed[trimmed.length - 1].trim()) trimmed.pop();
+
+  const icon = trimmed.length && isCalloutIcon(trimmed[0]) ? trimmed.shift().trim() : "";
+  while (trimmed.length && !trimmed[0].trim()) trimmed.shift();
+
+  return `
+    <div class="callout${icon ? "" : " callout-no-icon"}">
+      ${icon ? `<span class="callout-icon" aria-hidden="true">${escapeHtml(icon)}</span>` : ""}
+      <div class="callout-body">${trimmed.length ? renderMarkdown(trimmed.join("\n")) : ""}</div>
+    </div>
+  `;
+}
+
+function isCalloutIcon(line) {
+  const value = line.trim();
+  return value.length > 0 && value.length <= 6 && !/[A-Za-z]{2,}/.test(value) && !/\s/.test(value);
 }
 
 function isComparisonHeading(line) {

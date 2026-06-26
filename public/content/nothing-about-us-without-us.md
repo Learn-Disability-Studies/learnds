@@ -1,3 +1,5 @@
+# Nothing About Us Without Us
+
 Good to know: Models of Disability
 
 Check out next: Independent Living (IL)
@@ -63,7 +65,7 @@ The founding document that officially conceptualized “Nothing About Us Without
 > Good for: Lived Experience, Concept Grasp, Historical Perspective
 > 
 
-Nothing About Us Without Us: Disability Oppression and Empowerment
+[Nothing About Us Without Us: Disability Oppression and Empowerment](https://www.amazon.com/Nothing-About-Without-Disability-Empowerment/dp/0520224817)
 
 </aside>
 
@@ -77,7 +79,7 @@ Nothing About Us Without Us: Disability Oppression and Empowerment
 > Good for: Concept grasp, Lived Experience, Introductory Understanding
 > 
 
-Nothing About Us Without Us
+[Nothing About Us Without Us](https://www.youtube.com/watch?v=ePlva69rVoQ)
 
 </aside>
 
@@ -90,6 +92,6 @@ Podcast series embodying “Nothing About Us Without Us” in action, featuring 
 
 Good for: Lived Experience, Perspective Immersion, Applied example
 
-Podcast
+[Podcast](https://disabilityvisibilityproject.com/podcast-2/)
 
 </aside>

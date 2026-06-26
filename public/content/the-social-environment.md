@@ -16,22 +16,7 @@ The environment is composed by three major pillars:
 | **Attitudes** | **Infrastructure** | **Institutions** |
 | --- | --- | --- |
 | What people think  | Built physical structures | Organizational structures |
-|   • Norms
-  • Assumptions
-  • Narratives 
-  • Expectations
-  • Biases
-  • Prejudices |   • Ramps
-  • Subtitles
-  • Elevators
-  • Doorways
-  • Signage
-  • Interfaces |   • Laws
-  • Policies
-  • Standards
-  • Planning 
-  • Protocols
-  • Systems |
+| • Norms<br>• Assumptions<br>• Narratives<br>• Expectations<br>• Biases<br>• Prejudices | • Ramps<br>• Subtitles<br>• Elevators<br>• Doorways<br>• Signage<br>• Interfaces | • Laws<br>• Policies<br>• Standards<br>• Planning<br>• Protocols<br>• Systems |
 
 ## Clarification
 

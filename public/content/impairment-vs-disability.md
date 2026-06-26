@@ -61,13 +61,13 @@ The twofold distinction shifts burden of change from individuals to society
 - Disability is a medical condition that a person carries
 - Person has disability-Issue is the person
 
-## Lived experience
-
 **Identity first-Disabled people**
 
 - Social model
 - Disability is a social phenomenon that a person faces
 - Person is disabled-Issue is the disability
+
+## Lived experience
 
 ## Extension
 

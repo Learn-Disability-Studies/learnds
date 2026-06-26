@@ -396,6 +396,13 @@ function renderMarkdown(markdown) {
       continue;
     }
 
+    const comparison = readComparison(lines, i);
+    if (comparison) {
+      html += renderComparison(comparison.cards);
+      i = comparison.nextIndex;
+      continue;
+    }
+
     const paragraph = [line];
     i += 1;
     while (i < lines.length && lines[i].trim() && !startsMarkdownBlock(lines[i])) {
@@ -416,7 +423,8 @@ function startsMarkdownBlock(value) {
     /^#{3,4}\s+/.test(line) ||
     /^>\s?/.test(line) ||
     isTableLine(line) ||
-    isListLine(value);
+    isListLine(value) ||
+    isComparisonHeading(line);
 }
 
 function isTableLine(line) {
@@ -457,10 +465,58 @@ function renderStructuredList(lines) {
   `;
 }
 
+function isComparisonHeading(line) {
+  return /^\*\*[^*]+\*\*$/.test(line.trim());
+}
+
+function readComparison(lines, startIndex) {
+  let index = startIndex;
+  const cards = [];
+
+  while (index < lines.length) {
+    while (index < lines.length && !lines[index].trim()) index += 1;
+
+    const headingMatch = lines[index]?.trim().match(/^\*\*([^*]+)\*\*$/);
+    if (!headingMatch) break;
+
+    index += 1;
+    while (index < lines.length && !lines[index].trim()) index += 1;
+
+    const items = [];
+    while (index < lines.length && isListLine(lines[index])) {
+      items.push(lines[index].replace(/^\s*(?:[-*]|\d+\.)\s+/, "").trim());
+      index += 1;
+    }
+
+    if (!items.length) return null;
+    cards.push({ title: headingMatch[1], items });
+
+    while (index < lines.length && !lines[index].trim()) index += 1;
+  }
+
+  return cards.length >= 2 ? { cards, nextIndex: index } : null;
+}
+
+function renderComparison(cards) {
+  return `
+    <div class="comparison-grid">
+      ${cards.map((card, index) => `
+        <section class="comparison-card comparison-card-${index + 1}">
+          <h3>${inlineMarkdown(card.title)}</h3>
+          <ul>
+            ${card.items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}
+          </ul>
+        </section>
+      `).join("")}
+    </div>
+  `;
+}
+
 function inlineMarkdown(value) {
   return escapeHtml(value)
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/&lt;br\s*\/?&gt;/gi, "<br />")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>');
 }
 

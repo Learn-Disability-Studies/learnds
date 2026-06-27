@@ -17,7 +17,7 @@ Ableism can be classified through two different angles of categorizations:
 | Institutional  | Interpersonal | Internal |
 | --- | --- | --- |
 | Ableism that affects organization policy/laws  | Ableism that affects social interactions/relationships  | Ableism that is affects individual perceptions/internalizations |
-1. **Forms**
+2. **Forms**
 
 | Hostile | Benevolent | Ambivalent |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ Internal ableism
 - People pressuring themselves to suppress the traits of their impairments in order to pass as “normal”
 </aside>
 
-1. **Forms**
+2. **Forms**
 
 <aside>
 🤬

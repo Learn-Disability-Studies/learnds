@@ -159,7 +159,7 @@ function render() {
       </a>
       <nav aria-label="Primary navigation">
         <a href="#/" class="${state.route.page === "home" ? "active" : ""}">Index</a>
-        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">Contribute on GitHub</a>
+        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">Edit on GitHub</a>
       </nav>
     </header>
     ${renderBody()}

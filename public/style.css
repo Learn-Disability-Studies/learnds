@@ -106,7 +106,6 @@ nav a,
 }
 
 nav a:hover,
-nav a.active,
 .button:hover,
 .segmented button:hover,
 .segmented button.active {
@@ -165,7 +164,8 @@ nav a.active,
 }
 
 .hero-media-composite {
-  display: block;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .hero-media img {
@@ -180,7 +180,9 @@ nav a.active,
 }
 
 .hero-media-composite img {
-  height: auto;
+  width: auto;
+  max-width: 100%;
+  height: var(--hero-copy-height, auto);
   max-height: min(72vh, 720px);
   object-fit: contain;
 }

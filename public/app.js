@@ -19,6 +19,10 @@ window.addEventListener("hashchange", () => {
   render();
 });
 
+window.addEventListener("resize", () => {
+  syncHeroMediaHeight();
+});
+
 loadContent();
 render();
 
@@ -159,7 +163,7 @@ function render() {
         <span><strong>${SITE.name}</strong><small>${SITE.fullName}</small></span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="#/" ${isHome ? 'data-home-index="true"' : ""} class="${isHome ? "active" : ""}">Index</a>
+        <a href="#/" ${isHome ? 'data-home-index="true"' : ""}>Index</a>
         <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">${isHome ? "Contribute on GitHub" : "Edit on GitHub"}</a>
       </nav>
     </header>
@@ -168,6 +172,7 @@ function render() {
 
   if (window.lucide) window.lucide.createIcons();
   bindEvents();
+  syncHeroMediaHeight();
 }
 
 function renderBody() {
@@ -561,6 +566,20 @@ function bindEvents() {
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
       history.replaceState(null, "", `#/entry/${state.route.slug}`);
     });
+  });
+}
+
+function syncHeroMediaHeight() {
+  const schedule = window.requestAnimationFrame || ((callback) => setTimeout(callback, 0));
+  schedule(() => {
+    const copy = document.querySelector(".hero-copy");
+    const media = document.querySelector(".hero-media-composite");
+    if (!copy || !media) return;
+    if (window.matchMedia && window.matchMedia("(max-width: 1000px)").matches) {
+      media.style.removeProperty("--hero-copy-height");
+      return;
+    }
+    media.style.setProperty("--hero-copy-height", `${Math.round(copy.getBoundingClientRect().height)}px`);
   });
 }
 

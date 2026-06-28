@@ -164,6 +164,10 @@ nav a.active,
   align-items: start;
 }
 
+.hero-media-composite {
+  display: block;
+}
+
 .hero-media img {
   display: block;
   width: 100%;
@@ -173,6 +177,12 @@ nav a.active,
   object-fit: contain;
   object-position: center;
   box-shadow: var(--shadow);
+}
+
+.hero-media-composite img {
+  height: auto;
+  max-height: min(72vh, 720px);
+  object-fit: contain;
 }
 
 .hero-media img:nth-child(2) {
@@ -777,6 +787,11 @@ nav a.active,
 
   .hero-media img {
     height: 240px;
+  }
+
+  .hero-media-composite img {
+    height: auto;
+    max-height: 520px;
   }
 
   .entry-row {

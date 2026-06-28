@@ -150,6 +150,7 @@ function visibleEntries() {
 function render() {
   const root = document.getElementById("root");
   if (!root) return;
+  const isHome = state.route.page === "home";
 
   root.innerHTML = `
     <header class="site-header">
@@ -158,8 +159,8 @@ function render() {
         <span><strong>${SITE.name}</strong><small>${SITE.fullName}</small></span>
       </a>
       <nav aria-label="Primary navigation">
-        <a href="#/" class="${state.route.page === "home" ? "active" : ""}">Index</a>
-        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">Edit on GitHub</a>
+        <a href="#/" ${isHome ? 'data-home-index="true"' : ""} class="${isHome ? "active" : ""}">Index</a>
+        <a href="${SITE.repoUrl}" target="_blank" rel="noreferrer">${isHome ? "Contribute on GitHub" : "Edit on GitHub"}</a>
       </nav>
     </header>
     ${renderBody()}
@@ -193,15 +194,12 @@ function renderHome() {
           <p><strong>Our team:</strong> LearnDS is currently maintained by Jerry and Hank. As non-disabled allies, we strive to prioritize lived experiences in our work.</p>
           <p class="contact-line">If you are interested in contributing, please contact <a href="mailto:${SITE.contact}">${SITE.contact}</a>.</p>
         </div>
-        <div class="hero-media" aria-label="Selected disability studies readings">
-          <img src="./assets/politics-of-disablement.jpg" alt="The Politics of Disablement by Michael Oliver" />
-          <img src="./assets/understanding-disability.jpg" alt="Understanding Disability by Michael Oliver" />
-          <img src="./assets/disability-studies-reader.jpg" alt="The Disability Studies Reader edited by Lennard J. Davis" />
-          <img src="./assets/nothing-about-us-without-us.png" alt="Nothing About Us Without Us by James I. Charlton" />
+        <div class="hero-media hero-media-composite" aria-label="Selected disability studies readings">
+          <img src="./assets/homepage-books-composite.jpg" alt="A collage of four disability studies books: The Politics of Disablement, Understanding Disability, The Disability Studies Reader, and Nothing About Us Without Us" />
         </div>
       </section>
 
-      <section class="catalogue-page" aria-labelledby="catalogue-title">
+      <section id="site-index" class="catalogue-page" aria-labelledby="catalogue-title">
         <div class="section-bar">
           <div>
             <p class="eyebrow">Index</p>
@@ -543,6 +541,16 @@ function bindEvents() {
         nextSearch.focus();
         nextSearch.setSelectionRange(nextSearch.value.length, nextSearch.value.length);
       }
+    });
+  }
+
+  const homeIndex = document.querySelector("[data-home-index]");
+  if (homeIndex) {
+    homeIndex.addEventListener("click", (event) => {
+      event.preventDefault();
+      const target = document.getElementById("site-index");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", "#/");
     });
   }
 

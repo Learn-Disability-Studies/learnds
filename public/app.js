@@ -1,7 +1,7 @@
 const SITE = {
   name: "LearnDS",
   fullName: "Learn Disability Studies",
-  repoUrl: "https://github.com/cqw-acq/learnds",
+  repoUrl: "https://github.com/Learn-Disability-Studies/learnds",
   contact: "hangzhi.bao@icloud.com"
 };
 

@@ -200,7 +200,7 @@ function renderHome() {
           <p class="contact-line">If you are interested in contributing, please contact <a href="mailto:${SITE.contact}">${SITE.contact}</a>.</p>
         </div>
         <div class="hero-media hero-media-composite" aria-label="Selected disability studies readings">
-          <img src="./assets/homepage-books-composite.jpg" alt="A collage of four disability studies books: The Politics of Disablement, Understanding Disability, The Disability Studies Reader, and Nothing About Us Without Us" />
+          <img src="./assets/Screenshot 2026-06-28 at 17.59.15.png" alt="A collage of four disability studies books: The Politics of Disablement, Understanding Disability, The Disability Studies Reader, and Nothing About Us Without Us" />
         </div>
       </section>
 

@@ -591,3 +591,22 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+.hero {
+  display: flex;
+  align-items: stretch;
+}
+
+.hero-copy,
+.hero-media-composite {
+  flex: 1;
+}
+
+.hero-media-composite {
+  height: var(--hero-copy-height);
+}
+
+.hero-media-composite img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
